@@ -1,5 +1,12 @@
 const puppeteer = require("puppeteer");
 const { autoScroll, modalKiller, checkBodyScroll } = require("./utils");
+const fs = require("fs");
+const { resolve } = require("path");
+
+const shotsDir = resolve(__dirname, "..", "shots");
+if (!fs.existsSync(shotsDir)) {
+  fs.mkdirSync(shotsDir);
+}
 
 const tests = [
   "https://www.merckgroup.com.cn/cn-zh/research/science-space/envisioning-tomorrow/scarcity-of-resources/mof.html",
@@ -54,7 +61,6 @@ const run = async (urls = tests, type = "png") => {
     defaultViewport: null,
   });
 
-  // const screenshots = []
   for await (const url of urls) {
     let page = await browser.newPage();
     await page.setUserAgent(
@@ -62,12 +68,9 @@ const run = async (urls = tests, type = "png") => {
     );
     await screenshot(page, url, type);
   }
-  // Promise.all(screenshots).then()
 
   await browser.close();
 };
-
-// run(tests)
 
 module.exports = {
   run,
