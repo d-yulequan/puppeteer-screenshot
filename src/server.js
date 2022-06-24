@@ -7,7 +7,8 @@ app.use(async (ctx) => {
   const { request } = ctx;
   if (request?.url) {
     const { url = "", type = "png" } = request.query;
-    run(url.split(","), type);
+    await run(url.split(","), type);
+    ctx.body = "搞完了";
   } else {
     ctx.body = "链接错了，傻蛋";
   }
