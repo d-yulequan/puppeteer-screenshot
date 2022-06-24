@@ -33,7 +33,10 @@ const screenshot = async (page, url, type) => {
 };
 
 // 启动应用
-const run = async (urls = tests, type = "png") => {
+const run = async (urls = [], type = "png") => {
+  if (!Array.isArray(urls) || !urls.length) {
+    return;
+  }
   let browser = await puppeteer.launch({
     args: [
       "--window-size=1920,1080",
