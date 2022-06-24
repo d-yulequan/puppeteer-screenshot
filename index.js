@@ -1,6 +1,6 @@
 const puppeteer = require("puppeteer");
-const { autoScroll } = require("./utils");
-const { modalKiller, checkBodyScroll } = require("./dom");
+const { autoScroll } = require("./client/utils");
+const { modalKiller, checkBodyScroll } = require("./client/dom");
 
 const tests = [
   "https://www.merckgroup.com.cn/cn-zh/research/science-space/envisioning-tomorrow/scarcity-of-resources/mof.html",

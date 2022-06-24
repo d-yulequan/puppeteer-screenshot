@@ -61,18 +61,12 @@ const modalKiller = (page) => {
         if (top === "0px") side++;
 
         const rule1 = side >= 2;
-        const rule2 =
-          Number((domWidth / clientWidth).toFixed(2)) > OCCUPY_SPACE;
+        const rule2 = Number((domWidth / clientWidth).toFixed(2)) > OCCUPY_SPACE;
         const rule3 = top !== "0px";
 
         if ((rule1 || rule2) && top !== "0px") {
           resDom.push(d);
-        } else if (
-          rule1 &&
-          domWidth >= clientWidth &&
-          domHeight >= clientHeight &&
-          notAllMine(d)
-        ) {
+        } else if (rule1 && domWidth >= clientWidth && domHeight >= clientHeight && notAllMine(d)) {
           resDom.push(d);
         } else {
           const { y: y1 } = d.getBoundingClientRect();

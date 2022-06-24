@@ -1,6 +1,6 @@
 var autoScroll = function (page) {
   return page.evaluate(() => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       var totalHeight = 0;
       var distance = 100;
       const max_distance = 20000;
