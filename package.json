@@ -1,0 +1,14 @@
+{
+  "name": "puppeteer-shot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "^15.0.0",
+    "puppeteer-core": "^15.0.0"
+  },
+  "devDependencies": {
+    "jimp": "^0.16.1",
+    "merge-img": "^2.1.3"
+  }
+}
