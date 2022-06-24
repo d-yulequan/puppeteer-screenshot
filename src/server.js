@@ -1,7 +1,7 @@
 const Koa = require("koa");
 const app = new Koa();
 
-const { run } = require("./client");
+const { run } = require("./lib");
 
 app.use(async (ctx) => {
   const { request } = ctx;
