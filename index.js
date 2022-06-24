@@ -11,7 +11,31 @@ const tests = [
   "https://allied.health/pharmaceutical/#pharma-development",
   "https://www.dompe.com/en/media/press-releases/domp%C3%A9-investimenti-strategici-e-collaborazione-con-engitix-per-luso-di-exscalate-la-piattaforma-di-intelligenza-artificiale-per-la-drug-discovery",
 ];
-(async () => {
+
+// 对单个页面取快照
+const screenshot = async (page, url, type) => {
+  return new Promise(async resolve => {
+    await page.goto(url, {
+      waitUntil: ["networkidle0"],
+    });
+
+    await checkBodyScroll(page);
+    await autoScroll(page);
+
+    setTimeout(async () => {
+      await modalKiller(page);
+      await page.screenshot({
+        fullPage: true,
+        path: `./shots/${await page.title()}.${type}`,
+      });
+      await page.close()
+      resolve()
+    }, 1000);
+  })
+}
+
+// 启动应用
+const run = async (urls = tests, type = 'png') => {
   let browser = await puppeteer.launch({
     args: [
       "--window-size=1920,1080",
@@ -24,29 +48,26 @@ const tests = [
     ],
     timeout: 0,
     pipe: true,
-    headless: false,
+    headless: true,
     ignoreHTTPSErrors: true,
     defaultViewport: null,
   });
-  let page = await browser.newPage();
 
-  await page.setUserAgent(
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36"
-  );
-  await page.goto(tests[0], {
-    timeout: 30000,
-    waitUntil: ["networkidle0"],
-  });
+  // const screenshots = []
+  for await (const url of urls) {
+    let page = await browser.newPage();
+    await page.setUserAgent(
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36"
+    );
+    await screenshot(page, url, type)
+  }
+  // Promise.all(screenshots).then()
 
-  await checkBodyScroll(page);
-  await autoScroll(page);
+  await browser.close();
+}
 
-  setTimeout(async () => {
-    await modalKiller(page);
-    await page.screenshot({
-      fullPage: true,
-      path: "./title.png",
-    });
-    await browser.close();
-  }, 1000);
-})();
+// run(tests)
+
+module.exports = {
+  run
+}
