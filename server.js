@@ -1,13 +1,13 @@
-const Koa = require('koa');
+const Koa = require("koa");
 const app = new Koa();
 
-const { run } = require('./index')
+const { run } = require("./index");
 
 app.use(async (ctx) => {
   const { request } = ctx;
   if (request?.url) {
-    const { url = '', type = 'png' } = request.query
-    run(url.split(','), type)
+    const { url = "", type = "png" } = request.query;
+    run(url.split(","), type);
   } else {
     ctx.body = "链接错了，傻蛋";
   }

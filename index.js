@@ -14,28 +14,30 @@ const tests = [
 
 // 对单个页面取快照
 const screenshot = async (page, url, type) => {
-  return new Promise(async resolve => {
-    await page.goto(url, {
-      waitUntil: ["networkidle0"],
-    });
+  return new Promise((resolve) => {
+    page
+      .goto(url, {
+        waitUntil: ["networkidle0"],
+      })
+      .then(async () => {
+        await checkBodyScroll(page);
+        await autoScroll(page);
 
-    await checkBodyScroll(page);
-    await autoScroll(page);
-
-    setTimeout(async () => {
-      await modalKiller(page);
-      await page.screenshot({
-        fullPage: true,
-        path: `./shots/${await page.title()}.${type}`,
+        setTimeout(async () => {
+          await modalKiller(page);
+          await page.screenshot({
+            fullPage: true,
+            path: `./shots/${await page.title()}.${type}`,
+          });
+          await page.close();
+          resolve();
+        }, 1000);
       });
-      await page.close()
-      resolve()
-    }, 1000);
-  })
-}
+  });
+};
 
 // 启动应用
-const run = async (urls = tests, type = 'png') => {
+const run = async (urls = tests, type = "png") => {
   let browser = await puppeteer.launch({
     args: [
       "--window-size=1920,1080",
@@ -59,15 +61,15 @@ const run = async (urls = tests, type = 'png') => {
     await page.setUserAgent(
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36"
     );
-    await screenshot(page, url, type)
+    await screenshot(page, url, type);
   }
   // Promise.all(screenshots).then()
 
   await browser.close();
-}
+};
 
 // run(tests)
 
 module.exports = {
-  run
-}
+  run,
+};
