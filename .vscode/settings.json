@@ -1,5 +1,5 @@
 {
-  "cSpell.words": ["commitlint", "nodebuffer"],
+  "cSpell.words": ["commitlint", "nodebuffer", "networkidle"],
   // #region 格式化
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
