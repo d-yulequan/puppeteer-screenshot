@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node src/server.js",
-    "start:client": "node src/client.js",
+    "test": "node src/test.js",
     "commit": "git add -A && git-cz",
     "prepare": "husky install"
   },

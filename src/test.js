@@ -8,6 +8,8 @@ const tests = [
   "https://www.telethon.it/en/stories-and-news/news/from-telethon-foundation/orchard-therapeutics-receives-ec-approval-for-libmeldy/",
   "https://allied.health/pharmaceutical/#pharma-development",
   "https://www.dompe.com/en/media/press-releases/domp%C3%A9-investimenti-strategici-e-collaborazione-con-engitix-per-luso-di-exscalate-la-piattaforma-di-intelligenza-artificiale-per-la-drug-discovery",
+  "https://www.prnewswire.com/news-releases/nordic-nanovector-new-publication-highlights-synergistic-potential-of-cd37-targeted-radioimmunoconjugate-humalutin-in-combination-with-the-parp-inhibitor-olaparib-301538100.html",
+  "https://www.globenewswire.com/news-release/2022/04/13/2422077/0/en/Neoleukin-Therapeutics-Announces-Preclinical-Data-for-NL-201-at-American-Association-for-Cancer-Research-AACR-Annual-Meeting.html",
 ];
 
 run(tests);

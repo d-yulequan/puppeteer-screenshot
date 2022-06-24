@@ -13,7 +13,7 @@ const screenshot = async (page, url, type) => {
   return new Promise((resolve) => {
     page
       .goto(url, {
-        waitUntil: ["networkidle0"],
+        waitUntil: ["domcontentloaded"],
       })
       .then(async () => {
         await checkBodyScroll(page);
@@ -28,6 +28,11 @@ const screenshot = async (page, url, type) => {
           await page.close();
           resolve();
         }, 1000);
+      })
+      .catch(async () => {
+        console.log(`${url}打开失败了`);
+        await page.close();
+        resolve();
       });
   });
 };
@@ -54,15 +59,16 @@ const run = async (urls = [], type = "png") => {
     defaultViewport: null,
   });
 
-  // const screenshots = []
+  const shots = [];
   for await (const url of urls) {
     let page = await browser.newPage();
     await page.setUserAgent(
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.115 Safari/537.36"
     );
-    await screenshot(page, url, type);
+    shots.push(screenshot(page, url, type));
   }
-  // Promise.all(screenshots).then()
+
+  await Promise.all(shots);
 
   await browser.close();
 };
