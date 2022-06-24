@@ -1,6 +1,5 @@
 const puppeteer = require("puppeteer");
-const { autoScroll } = require("./client/utils");
-const { modalKiller, checkBodyScroll } = require("./client/dom");
+const { autoScroll, modalKiller, checkBodyScroll } = require("./utils");
 
 const tests = [
   "https://www.merckgroup.com.cn/cn-zh/research/science-space/envisioning-tomorrow/scarcity-of-resources/mof.html",
@@ -59,7 +58,7 @@ const run = async (urls = tests, type = "png") => {
   for await (const url of urls) {
     let page = await browser.newPage();
     await page.setUserAgent(
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36"
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.115 Safari/537.36"
     );
     await screenshot(page, url, type);
   }

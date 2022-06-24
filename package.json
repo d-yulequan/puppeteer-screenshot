@@ -1,9 +1,10 @@
 {
   "name": "puppeteer-shot",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/server.js",
   "license": "MIT",
   "scripts": {
+    "start": "node src/server.js",
     "commit": "git add -A && git-cz",
     "prepare": "husky install"
   },
