@@ -1,4 +1,4 @@
-const { run } = require("./lib");
+const { run } = require("./screenshot");
 
 const tests = [
   "https://www.merckgroup.com.cn/cn-zh/research/science-space/envisioning-tomorrow/scarcity-of-resources/mof.html",

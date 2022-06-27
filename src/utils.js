@@ -88,7 +88,7 @@ const modalKiller = (page) => {
         const rule2 = Number((domWidth / clientWidth).toFixed(2)) > OCCUPY_SPACE;
         const rule3 = top !== "0px";
 
-        if ((rule1 || rule2) && top !== "0px") {
+        if ((rule1 || rule2) && rule3) {
           resDom.push(d);
         } else if (rule1 && domWidth >= clientWidth && domHeight >= clientHeight && notAllMine(d)) {
           resDom.push(d);
