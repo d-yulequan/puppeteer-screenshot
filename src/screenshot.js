@@ -6,7 +6,11 @@ const { resolve } = require("path");
 
 function createDir(dirname) {
   const dir = resolve(__dirname, "..", dirname);
-  fs.existsSync(dir) ? rimraf(dir) : fs.mkdirSync(dir);
+  fs.existsSync(dir)
+    ? rimraf(dir, (e) => {
+        console.log("删除", e);
+      })
+    : fs.mkdirSync(dir);
 }
 createDir("shots");
 createDir("pdf");
