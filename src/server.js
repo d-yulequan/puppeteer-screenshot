@@ -1,6 +1,6 @@
 const Koa = require("koa");
 const app = new Koa();
-const { run } = require("./lib");
+const { run } = require("./screenshot");
 
 app.use(async (ctx) => {
   const { request } = ctx;
