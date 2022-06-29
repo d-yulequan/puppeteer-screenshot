@@ -10,6 +10,23 @@ const tests = [
   "https://www.dompe.com/en/media/press-releases/domp%C3%A9-investimenti-strategici-e-collaborazione-con-engitix-per-luso-di-exscalate-la-piattaforma-di-intelligenza-artificiale-per-la-drug-discovery",
   "https://www.prnewswire.com/news-releases/nordic-nanovector-new-publication-highlights-synergistic-potential-of-cd37-targeted-radioimmunoconjugate-humalutin-in-combination-with-the-parp-inhibitor-olaparib-301538100.html",
   "https://www.globenewswire.com/news-release/2022/04/13/2422077/0/en/Neoleukin-Therapeutics-Announces-Preclinical-Data-for-NL-201-at-American-Association-for-Cancer-Research-AACR-Annual-Meeting.html",
+  "https://congress.eular.org/",
+  "https://eanm22.eanm.org/",
+  "https://ehaweb.org/",
+  "https://www.aan.com/conferences-community/annual-meeting/",
+  "https://www.escardio.org/Congresses-&-Events/ESC-Congress",
+  "https://www.psychiatry.org/",
+  "https://www.aasld.org/",
+  "https://www.thoracic.org/",
+  "https://ddw.org/",
+  "https://www.easd.org/",
+  "https://www.esmo.org/meetings/esmo-congress-2022",
+  "https://www.acc.org/",
+  "https://www.rheumatology.org/Annual-Meeting",
+  // 下面有讲究
+  "https://professional.diabetes.org/scientific-sessions",
+  "https://www.ersnet.org/",
+  "https://easl.eu/",
 ];
 
 run(tests);

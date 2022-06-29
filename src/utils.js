@@ -43,10 +43,11 @@ const modalKiller = (page) => {
   return page.evaluate(() => {
     return new Promise((resolve) => {
       function notAllMine(target) {
+        const STEP = 10;
         const bodyRect = target.getBoundingClientRect();
         const centerX = bodyRect.x + bodyRect.width / 2;
         const centerY = bodyRect.y + bodyRect.height / 2;
-        const offset = +((centerY - bodyRect.y) / 10).toFixed(2);
+        const offset = +((centerY - bodyRect.y) / STEP).toFixed(2);
 
         let startY = 0;
         const topEls = [];
@@ -58,7 +59,7 @@ const modalKiller = (page) => {
           }
         }
 
-        return topEls.length;
+        return topEls.length && topEls.length < STEP;
       }
 
       const OCCUPY_SPACE = 0.95;
@@ -67,6 +68,7 @@ const modalKiller = (page) => {
         const { zIndex, position } = getComputedStyle(i);
         return position === "fixed" && +zIndex > 0;
       });
+      const bodyChildren = Array.from(targetList.filter((i) => i.parentElement === document.body));
 
       const resDom = [];
 
@@ -90,27 +92,47 @@ const modalKiller = (page) => {
 
         if ((rule1 || rule2) && rule3) {
           resDom.push(d);
-        } else if (rule1 && domWidth >= clientWidth && domHeight >= clientHeight && notAllMine(d)) {
+        } else if (
+          rule1 &&
+          domWidth >= clientWidth &&
+          domHeight >= clientHeight &&
+          (notAllMine(d) || d.parentElement === document.body)
+        ) {
           resDom.push(d);
-        } else {
+        } else if (rule3) {
           const { y: y1 } = d.getBoundingClientRect();
-
-          if (rule3) {
-            window.scrollBy(0, 10);
-            requestAnimationFrame(() => {
-              let { y: y2 } = d.getBoundingClientRect();
-              y1 === y2 && resDom.push(d);
-              window.scrollBy(0, -10);
-            });
-          }
+          window.scrollBy(0, 10);
+          requestAnimationFrame(() => {
+            let { y: y2 } = d.getBoundingClientRect();
+            y1 === y2 && resDom.push(d);
+            window.scrollBy(0, -10);
+          });
         }
       });
 
       requestAnimationFrame(() => {
         resDom.forEach((dom) => {
-          dom.innerHTML = null;
-          dom.parentElement?.removeChild(dom);
+          let topChild = null;
+          bodyChildren.forEach((top) => {
+            top.contains(dom) && (topChild = top);
+          });
+
+          if (topChild) {
+            document.body.removeChild(topChild);
+          } else {
+            dom.innerHTML = null;
+            dom.parentElement?.removeChild(dom);
+          }
         });
+
+        // 兜底操作
+        if (bodyChildren.length) {
+          bodyChildren.forEach((top) => {
+            if (top.innerText.toLowerCase().contains("cookies")) {
+              document.body.removeChild(top);
+            }
+          });
+        }
         resolve();
       });
     });
