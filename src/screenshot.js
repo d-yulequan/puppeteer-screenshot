@@ -42,7 +42,7 @@ const screenshot = async (page, url) => {
       .catch(async () => {
         console.log(`${url}打开失败了`);
         await page.close();
-        reject();
+        resolve();
       });
   });
 };
