@@ -18,7 +18,7 @@ createDir("pdf");
 
 // 对单个页面取快照
 const screenshot = async (page, url) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     page
       .goto(url, {
         waitUntil: ["networkidle0"],
