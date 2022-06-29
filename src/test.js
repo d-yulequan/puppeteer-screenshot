@@ -24,9 +24,9 @@ const tests = [
   "https://www.acc.org/",
   "https://www.rheumatology.org/Annual-Meeting",
   "https://professional.diabetes.org/scientific-sessions",
+  "https://easl.eu/",
   // 下面有讲究
   "https://www.ersnet.org/",
-  "https://easl.eu/",
 ];
 
 run(tests);

@@ -45,6 +45,9 @@ const modalKiller = (page) => {
       function notAllMineFullScreen(target) {
         const STEP = 10;
         const bodyRect = target.getBoundingClientRect();
+
+        if (!(bodyRect.width && bodyRect.x >= 0 && bodyRect.y >= 0)) return false;
+
         const centerX = bodyRect.x + bodyRect.width / 2;
         const centerY = bodyRect.y + bodyRect.height / 2;
         const offsetY = +((centerY - bodyRect.y) / STEP).toFixed(2);
@@ -86,20 +89,54 @@ const modalKiller = (page) => {
         return Array.from(getAllTargetList(positionType).filter((i) => i.parentElement === document.body));
       }
 
+      function onCenter(dom) {
+        const { right, x, width } = dom.getBoundingClientRect();
+        return right - width === x;
+      }
+
       function killAbsoluteCenter() {
         const absoluteChildren = getTopLevelChildren("absolute");
         absoluteChildren.forEach((dom) => {
-          const { right, x, width } = dom.getBoundingClientRect();
-          if (right - width === x) dom.parentElement.removeChild(dom);
+          onCenter(dom) && dom.parentElement.removeChild(dom);
+        });
+      }
+
+      function killMaxZIndexTop(list) {
+        if (!list.length) return;
+
+        const maxDomRes = { dom: null, zIndex: 0 };
+        list.forEach((dom) => {
+          const { zIndex } = getComputedStyle(dom);
+
+          if (!maxDomRes.dom) {
+            Object.assign(maxDomRes, { dom, zIndex });
+          } else {
+            maxDomRes.zIndex < zIndex && Object.assign(maxDomRes, { dom, zIndex });
+          }
+        });
+
+        const { display } = getComputedStyle(maxDomRes.dom);
+        const { x, y, width, height } = maxDomRes.dom.getBoundingClientRect();
+        const point = { x: x + width / 2, y: y + height / 2 };
+
+        maxDomRes.dom.style.display = "none";
+
+        requestAnimationFrame(() => {
+          if (document.elementFromPoint(point.x, point.y) === document.body) {
+            maxDomRes.dom.style.display = display;
+          } else {
+            document.body.removeChild(maxDomRes.dom);
+          }
         });
       }
 
       const OCCUPY_SPACE = 0.95;
       const targetList = getAllTargetList();
+      const topDom = [];
       const resDom = [];
 
       targetList.forEach(async (d) => {
-        const { width, height, left, right, top, bottom } = getComputedStyle(d);
+        const { width, height, left, right, top, bottom, display } = getComputedStyle(d);
 
         const clientWidth = document.documentElement.clientWidth;
         const clientHeight = document.documentElement.clientHeight;
@@ -112,22 +149,23 @@ const modalKiller = (page) => {
         if (left === "0px") side++;
         if (top === "0px") side++;
 
+        // const rule0 = onCenter(d);
         const rule1 = side >= 2;
         const rule2 = Number((domWidth / clientWidth).toFixed(2)) > OCCUPY_SPACE;
         const rule3 = top !== "0px";
         const rule4 = d.parentElement === document.body;
         const rule5 = d.innerText.toLowerCase().includes("cookies");
+        const rule6 = domWidth >= clientWidth;
+        const rule7 = domHeight >= clientHeight;
+        const rule8 = display === "none";
 
-        if (rule4 && rule5) {
+        if (rule8) {
+          resDom.push(d);
+        } else if (rule4 && rule5) {
           resDom.push(d);
         } else if ((rule1 || rule2) && rule3) {
           resDom.push(d);
-        } else if (
-          rule1 &&
-          domWidth >= clientWidth &&
-          domHeight >= clientHeight &&
-          (notAllMineFullScreen(d) || rule4)
-        ) {
+        } else if (rule1 && rule6 && rule7 && (notAllMineFullScreen(d) || rule4)) {
           resDom.push(d);
         } else if (rule3) {
           const { y: y1 } = d.getBoundingClientRect();
@@ -137,6 +175,10 @@ const modalKiller = (page) => {
             y1 === y2 && resDom.push(d);
             window.scrollBy(0, -10);
           });
+        } else if (rule4 && !rule3 && !rule7) {
+          topDom.push(d);
+        } else {
+          console.log("unKill", d);
         }
       });
 
@@ -158,6 +200,8 @@ const modalKiller = (page) => {
         });
 
         killAbsoluteCenter();
+        killMaxZIndexTop(topDom);
+
         resolve();
       });
     });
