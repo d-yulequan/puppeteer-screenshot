@@ -23,8 +23,8 @@ const tests = [
   "https://www.esmo.org/meetings/esmo-congress-2022",
   "https://www.acc.org/",
   "https://www.rheumatology.org/Annual-Meeting",
-  // 下面有讲究
   "https://professional.diabetes.org/scientific-sessions",
+  // 下面有讲究
   "https://www.ersnet.org/",
   "https://easl.eu/",
 ];

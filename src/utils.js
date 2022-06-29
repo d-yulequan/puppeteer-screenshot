@@ -42,7 +42,7 @@ const checkBodyScroll = (page) => {
 const modalKiller = (page) => {
   return page.evaluate(() => {
     return new Promise((resolve) => {
-      function notAllMine(target) {
+      function notAllMineFullScreen(target) {
         const STEP = 10;
         const bodyRect = target.getBoundingClientRect();
         const centerX = bodyRect.x + bodyRect.width / 2;
@@ -59,17 +59,42 @@ const modalKiller = (page) => {
           }
         }
 
-        return topEls.length && topEls.length < STEP;
+        let startX = 0;
+        const leftEls = [];
+        while (startX <= centerX) {
+          startX += offset;
+          const pointEl = document.elementFromPoint(startX, centerY);
+          if (target.contains(pointEl)) {
+            leftEls.push(pointEl);
+          }
+        }
+
+        return topEls?.length !== STEP || leftEls?.length !== STEP;
+      }
+
+      function getAllTargetList(positionType = "fixed") {
+        const all = document.querySelectorAll("*");
+        const targetList = Array.from(all).filter((i) => {
+          const { zIndex, position } = getComputedStyle(i);
+          return position === positionType && +zIndex > 0;
+        });
+        return targetList;
+      }
+
+      function getTopLevelChildren(positionType = "fixed") {
+        return Array.from(getAllTargetList(positionType).filter((i) => i.parentElement === document.body));
+      }
+
+      function killAbsoluteCenter() {
+        const absoluteChildren = getTopLevelChildren("absolute");
+        absoluteChildren.forEach((dom) => {
+          const { right, x, width } = dom.getBoundingClientRect();
+          if (right - width === x) dom.parentElement.removeChild(dom);
+        });
       }
 
       const OCCUPY_SPACE = 0.95;
-      const all = document.querySelectorAll("*");
-      const targetList = Array.from(all).filter((i) => {
-        const { zIndex, position } = getComputedStyle(i);
-        return position === "fixed" && +zIndex > 0;
-      });
-      const bodyChildren = Array.from(targetList.filter((i) => i.parentElement === document.body));
-
+      const targetList = getAllTargetList();
       const resDom = [];
 
       targetList.forEach(async (d) => {
@@ -96,7 +121,7 @@ const modalKiller = (page) => {
           rule1 &&
           domWidth >= clientWidth &&
           domHeight >= clientHeight &&
-          (notAllMine(d) || d.parentElement === document.body)
+          (notAllMineFullScreen(d) || d.parentElement === document.body)
         ) {
           resDom.push(d);
         } else if (rule3) {
@@ -111,6 +136,8 @@ const modalKiller = (page) => {
       });
 
       requestAnimationFrame(() => {
+        const bodyChildren = getTopLevelChildren();
+
         resDom.forEach((dom) => {
           let topChild = null;
           bodyChildren.forEach((top) => {
@@ -125,9 +152,10 @@ const modalKiller = (page) => {
           }
         });
 
-        // 兜底操作
+        killAbsoluteCenter();
+
         bodyChildren.forEach(
-          (top) => top.innerText.toLowerCase().contains("cookies") && document.body.removeChild(top)
+          (top) => top.innerText.toLowerCase().includes("cookies") && top.parentElement?.removeChild(top)
         );
         resolve();
       });
