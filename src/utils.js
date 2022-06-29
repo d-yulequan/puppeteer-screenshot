@@ -47,12 +47,13 @@ const modalKiller = (page) => {
         const bodyRect = target.getBoundingClientRect();
         const centerX = bodyRect.x + bodyRect.width / 2;
         const centerY = bodyRect.y + bodyRect.height / 2;
-        const offset = +((centerY - bodyRect.y) / STEP).toFixed(2);
+        const offsetY = +((centerY - bodyRect.y) / STEP).toFixed(2);
+        const offsetX = +((centerX - bodyRect.x) / STEP).toFixed(2);
 
         let startY = 0;
         const topEls = [];
         while (startY <= centerY) {
-          startY += offset;
+          startY += offsetY;
           const pointEl = document.elementFromPoint(centerX, startY);
           if (target.contains(pointEl)) {
             topEls.push(pointEl);
@@ -62,7 +63,7 @@ const modalKiller = (page) => {
         let startX = 0;
         const leftEls = [];
         while (startX <= centerX) {
-          startX += offset;
+          startX += offsetX;
           const pointEl = document.elementFromPoint(startX, centerY);
           if (target.contains(pointEl)) {
             leftEls.push(pointEl);
@@ -114,14 +115,18 @@ const modalKiller = (page) => {
         const rule1 = side >= 2;
         const rule2 = Number((domWidth / clientWidth).toFixed(2)) > OCCUPY_SPACE;
         const rule3 = top !== "0px";
+        const rule4 = d.parentElement === document.body;
+        const rule5 = d.innerText.toLowerCase().includes("cookies");
 
-        if ((rule1 || rule2) && rule3) {
+        if (rule4 && rule5) {
+          resDom.push(d);
+        } else if ((rule1 || rule2) && rule3) {
           resDom.push(d);
         } else if (
           rule1 &&
           domWidth >= clientWidth &&
           domHeight >= clientHeight &&
-          (notAllMineFullScreen(d) || d.parentElement === document.body)
+          (notAllMineFullScreen(d) || rule4)
         ) {
           resDom.push(d);
         } else if (rule3) {
@@ -153,10 +158,6 @@ const modalKiller = (page) => {
         });
 
         killAbsoluteCenter();
-
-        bodyChildren.forEach(
-          (top) => top.innerText.toLowerCase().includes("cookies") && top.parentElement?.removeChild(top)
-        );
         resolve();
       });
     });
