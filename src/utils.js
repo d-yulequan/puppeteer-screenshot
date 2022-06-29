@@ -126,13 +126,9 @@ const modalKiller = (page) => {
         });
 
         // 兜底操作
-        if (bodyChildren.length) {
-          bodyChildren.forEach((top) => {
-            if (top.innerText.toLowerCase().contains("cookies")) {
-              document.body.removeChild(top);
-            }
-          });
-        }
+        bodyChildren.forEach(
+          (top) => top.innerText.toLowerCase().contains("cookies") && document.body.removeChild(top)
+        );
         resolve();
       });
     });
