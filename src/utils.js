@@ -26,8 +26,9 @@ const checkBodyScroll = (page) => {
   return page.evaluate(() => {
     return new Promise((resolve) => {
       const { position, overflowY } = getComputedStyle(document.body);
-      if (position === "fixed" && overflowY === "hidden") {
+      if ((position === "fixed" && overflowY === "hidden") || overflowY === "hidden") {
         document.body.style.position = "unset";
+        document.body.style.overflowY = "scroll";
         document.documentElement.style.position = "unset";
         document.documentElement.style.overflowY = "scroll";
       }
