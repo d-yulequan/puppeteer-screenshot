@@ -80,8 +80,8 @@ const modalKiller = (page) => {
       function getAllTargetList(positionType = "fixed") {
         const all = document.querySelectorAll("*");
         const targetList = Array.from(all).filter((i) => {
-          const { zIndex, position } = getComputedStyle(i);
-          return position === positionType && +zIndex > 0;
+          const { zIndex, position, bottom } = getComputedStyle(i);
+          return position === positionType && (+zIndex > 0 || bottom === "0px");
         });
         return targetList;
       }
