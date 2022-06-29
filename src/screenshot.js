@@ -7,8 +7,9 @@ const { resolve } = require("path");
 function createDir(dirname) {
   const dir = resolve(__dirname, "..", dirname);
   fs.existsSync(dir)
-    ? rimraf(dir, (e) => {
-        console.log("删除", e);
+    ? rimraf(dir, () => {
+        console.log("删除", dirname);
+        fs.mkdirSync(dir);
       })
     : fs.mkdirSync(dir);
 }
