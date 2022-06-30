@@ -9,7 +9,7 @@ function createDir(dirname) {
     fs.rmSync(dir, { recursive: true });
     console.info(`存在/${dirname}，删除下`, `删除/${dirname}√√√`);
     fs.mkdirSync(dir);
-    console.info("重新生成", `${dirname}√√√`);
+    console.info("重新生成", `/${dirname}√√√`);
   } else {
     fs.mkdirSync(dir);
     console.info("生成", `/${dirname}√√√`);
