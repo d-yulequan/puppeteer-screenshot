@@ -73,7 +73,7 @@ const run = async (urls = [], type = "png") => {
     headless: false,
     ignoreHTTPSErrors: true,
     defaultViewport: null,
-    dumpio: true,
+    // dumpio: true,
     executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
   });
 
