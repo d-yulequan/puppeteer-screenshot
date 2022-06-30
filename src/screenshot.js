@@ -21,7 +21,7 @@ const screenshot = async (page, url, type) => {
   return new Promise((resolve) => {
     page
       .goto(url, {
-        waitUntil: ["networkidle0"],
+        waitUntil: ["domcontentloaded"],
       })
       .then(async () => {
         await checkBodyScroll(page);
@@ -64,12 +64,17 @@ const run = async (urls = [], type = "png") => {
       "--no-first-run",
       "--no-zygote",
       "--no-sandbox",
+      "--disable-web-security",
+      "--proxy-bypass-list=*",
+      "--ignore-certificate-errors",
     ],
     timeout: 0,
     pipe: true,
     headless: false,
     ignoreHTTPSErrors: true,
     defaultViewport: null,
+    dumpio: true,
+    executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
   });
 
   // 初始化存储文件夹
