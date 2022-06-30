@@ -33,9 +33,7 @@ const checkBodyScroll = (page) => {
         document.documentElement.style.overflowY = "scroll";
       }
 
-      requestAnimationFrame(() => {
-        resolve();
-      });
+      requestAnimationFrame(() => resolve());
     });
   });
 };
@@ -184,9 +182,8 @@ const modalKiller = (page) => {
       });
 
       requestAnimationFrame(() => {
-        const bodyChildren = getTopLevelChildren();
-
         resDom.forEach((dom) => {
+          const bodyChildren = getTopLevelChildren();
           let topChild = null;
           bodyChildren.forEach((top) => {
             top.contains(dom) && (topChild = top);
